@@ -1,3 +1,4 @@
+from importlib.util import find_spec
 from pathlib import Path
 
 import numpy as np
@@ -122,3 +123,12 @@ def test_read_transactions(tmp_path: Path) -> None:
     assert len(read_transactions(path)) == 4
     with pytest.raises(DataError, match="does not exist"):
         read_transactions(tmp_path / "missing.csv")
+
+
+@pytest.mark.skipif(find_spec("pyarrow") is not None, reason="pyarrow is installed")
+def test_parquet_without_pyarrow_explains_what_to_install(tmp_path: Path) -> None:
+    path = tmp_path / "sales.parquet"
+    path.write_bytes(b"PAR1")
+
+    with pytest.raises(DataError, match="needs pyarrow"):
+        read_transactions(path)
