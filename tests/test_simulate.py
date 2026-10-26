@@ -48,3 +48,13 @@ def test_naive_regression_is_biased_toward_zero() -> None:
     slope = np.polyfit(np.log(frame["price"]), np.log(frame["quantity"].clip(lower=1)), 1)[0]
 
     assert slope > sim.true_elasticity["SKU-001"] + 0.5
+
+
+def test_sales_peaks_raise_price_and_demand() -> None:
+    frame = simulate(SimulationConfig(n_products=1)).transactions
+    day = frame["date"].dt.day_of_year
+    peak = frame[day.between(354, 360)]
+    before = frame[day.between(330, 345)]
+
+    assert peak["price"].mean() > 1.15 * before["price"].mean()
+    assert peak["quantity"].mean() > 1.5 * before["quantity"].mean()

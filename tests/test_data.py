@@ -69,6 +69,7 @@ def test_features_include_calendar_and_controls() -> None:
     assert panel.features == (
         "trend",
         "month",
+        "day_of_year",
         "week_sin",
         "week_cos",
         "day_of_week",

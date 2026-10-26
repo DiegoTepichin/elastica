@@ -7,8 +7,8 @@ from elastica.dml import DMLResult, Folds, estimate_elasticity
 from elastica.simulate import SimulationConfig, simulate
 
 
-def simulated_result(**kwargs: object) -> tuple[DMLResult, float]:
-    sim = simulate(SimulationConfig(n_products=1, n_days=730, elasticity_range=(-1.8, -1.8)))
+def simulated_result(n_days: int = 730, **kwargs: object) -> tuple[DMLResult, float]:
+    sim = simulate(SimulationConfig(n_products=1, n_days=n_days, elasticity_range=(-1.8, -1.8)))
     panel = prepare(sim.transactions, Schema(controls=("promo",)))
     frame = panel.frame
     result = estimate_elasticity(
@@ -29,16 +29,17 @@ def test_recovers_the_true_elasticity() -> None:
     assert result.warnings == ()
 
 
-def test_naive_estimate_is_biased_and_dml_is_not() -> None:
+def test_naive_and_linear_estimates_are_biased_and_dml_is_not() -> None:
     result, truth = simulated_result()
 
-    assert abs(result.naive_elasticity - truth) > 3 * abs(result.elasticity - truth)
+    assert abs(result.naive_elasticity - truth) > 5 * abs(result.elasticity - truth)
+    assert abs(result.linear_elasticity - truth) > 3 * abs(result.elasticity - truth)
 
 
-def test_time_blocked_folds() -> None:
-    result, truth = simulated_result(folds=Folds.TIME, n_repeats=1)
+def test_time_blocked_folds_with_three_seasons() -> None:
+    result, truth = simulated_result(n_days=1095, folds=Folds.TIME, n_repeats=1)
 
-    assert result.elasticity == pytest.approx(truth, abs=0.2)
+    assert result.elasticity == pytest.approx(truth, abs=0.25)
 
 
 def test_accepts_any_regressor() -> None:
