@@ -11,7 +11,7 @@ import pandas as pd
 
 LOG_PRICE = "log_price"
 LOG_QUANTITY = "log_quantity"
-CALENDAR_FEATURES = ("trend", "month", "week_sin", "week_cos")
+CALENDAR_FEATURES = ("trend", "month", "day_of_year", "week_sin", "week_cos")
 DAILY_FEATURES = ("day_of_week",)
 ALL_PRODUCTS = "all"
 
@@ -178,6 +178,7 @@ def _add_calendar(panel: pd.DataFrame, frequency: Frequency) -> list[str]:
     start = period.min()
     panel["trend"] = (period - start).dt.days / 365.25
     panel["month"] = period.dt.month.astype(float)
+    panel["day_of_year"] = period.dt.day_of_year.astype(float)
     week = period.dt.isocalendar().week.astype(float)
     panel["week_sin"] = np.sin(2 * np.pi * week / 52.18)
     panel["week_cos"] = np.cos(2 * np.pi * week / 52.18)
