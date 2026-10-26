@@ -61,7 +61,10 @@ def read_transactions(path: str | Path) -> pd.DataFrame:
     if not file.exists():
         raise DataError(f"{file} does not exist")
     if file.suffix.lower() == ".parquet":
-        return pd.read_parquet(file)
+        try:
+            return pd.read_parquet(file)
+        except ImportError as exc:
+            raise DataError("reading Parquet needs pyarrow: pip install pyarrow") from exc
     return pd.read_csv(file)
 
 
