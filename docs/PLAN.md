@@ -15,7 +15,7 @@ log q = θ · log p + g(X) + ε        θ = price elasticity
 log p =         m(X) + v
 ```
 
-1. Cross-fit `E[log q | X]` and `E[log p | X]` with scikit-learn learners (K folds, optionally blocked by time so the future never predicts the past).
+1. Cross-fit `E[log q | X]` and `E[log p | X]` with scikit-learn learners (K folds, optionally in contiguous time blocks, which limits leakage between neighbouring periods).
 2. Regress outcome residuals on price residuals: `θ̂ = Σ ṽ·ũ / Σ ṽ²`.
 3. Heteroskedasticity-robust standard error from the DML orthogonal score; normal confidence interval.
 4. Repeat cross-fitting with different splits and take the median (Chernozhukov et al., 2018).
@@ -78,7 +78,7 @@ Real-time pricing, e-commerce integrations, cross-price elasticities, a web UI, 
 
 ## Launch checklist
 
-- [ ] Checks green on main.
-- [ ] README with a benchmark chart produced by a committed script.
+- [x] Checks green on main (run locally; Actions paused by budget on private repos).
+- [x] README with a benchmark chart produced by a committed script.
 - [ ] Wheel installs and runs `elastica simulate | elastica estimate`.
 - [ ] Tag `v1.0.0` (PyPI only with the maintainer's OK).

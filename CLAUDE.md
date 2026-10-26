@@ -10,11 +10,9 @@ A library that takes a CSV of transactions, estimates price elasticity with caus
 
 Data scientists and pricing analysts in retail and e-commerce.
 
-## Scope (v0.1)
+## Scope
 
-To be defined in `docs/PLAN.md` during the planning session.
-
-Anything else is out of scope until v0.1 ships.
+v1.0 scope and out-of-scope list live in `docs/PLAN.md`. Ideas beyond it go to GitHub issues. No code from CAFE, ever.
 
 ## Code standards
 
@@ -29,8 +27,15 @@ Anything else is out of scope until v0.1 ships.
 
 ## Commands
 
-None yet. Add each command here once it exists and has been run.
+- `uv sync`: install the project and dev dependencies (`--all-groups` adds matplotlib for the benchmark).
+- `uv run ruff check .` / `uv run ruff format --check .` / `uv run mypy .` / `uv run pytest`: the CI checks.
+- `uv run elastica simulate|estimate|price ...`: the CLI (see README).
+- `uv run --group docs python examples/benchmark.py [n]`: regenerate `docs/benchmark.svg` and the README table.
+- `uv build`: build the sdist and wheel.
 
 ## Structure
 
-Not defined yet. Decided in `docs/PLAN.md`.
+- `src/elastica/`: `simulate`, `data`, `dml`, `estimate`, `pricing`, `cli`.
+- `tests/`: one module per source module; statistical recovery tests use fixed seeds.
+- `examples/benchmark.py`: the README benchmark.
+- `docs/`: `PLAN.md` and `benchmark.svg`.

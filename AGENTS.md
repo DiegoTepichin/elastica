@@ -4,8 +4,8 @@ Operational rules for any coding agent (Claude Code, Gemini CLI, Codex, etc.) wo
 
 ## Before changing code
 
-- Read `CLAUDE.md` and, if present, `docs/PLAN.md`. Work only on the current milestone.
-- If a request falls outside the v0.1 scope, say so and propose filing it as an issue instead.
+- Read `CLAUDE.md` and, if present, `docs/PLAN.md`. Stay within the scope in `docs/PLAN.md`.
+- If a request falls outside that scope, say so and propose filing it as an issue instead.
 
 ## Workflow
 
