@@ -22,7 +22,7 @@ jobs:
         with:
           python-version: "3.14"
           enable-cache: true
-      - run: uv sync --locked --dev
+      - run: uv sync --locked --all-groups
       - run: uv run ruff check .
       - run: uv run ruff format --check .
       - run: uv run mypy .
@@ -48,3 +48,21 @@ jobs:
           enable-cache: true
       - run: uv sync --locked --dev
       - run: uv run pytest
+
+  package:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10.2.0
+        with:
+          python-version: "3.14"
+      - run: uv build --out-dir dist
+      - run: uv venv "$RUNNER_TEMP/smoke" --python 3.14
+      - run: uv pip install --python "$RUNNER_TEMP/smoke/bin/python" dist/*.whl
+      - name: Installed CLI simulates, estimates and prices
+        working-directory: ${{ runner.temp }}
+        run: |
+          smoke/bin/elastica --version
+          smoke/bin/elastica simulate -o sales.csv --products 2 --days 365
+          smoke/bin/elastica price sales.csv --controls promo --cost unit_cost --repeats 1

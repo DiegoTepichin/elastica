@@ -1,6 +1,6 @@
 [project]
 name = "elastica"
-version = "0.0.0"
+version = "1.0.0"
 description = "Causal price elasticity from transaction data with double machine learning, and the profit-maximizing price that follows."
 readme = "README.md"
 license = "MIT"
@@ -57,7 +57,7 @@ select = ["E", "W", "F", "I", "B", "UP", "SIM", "RUF", "N", "PT", "ANN", "TC", "
 [tool.mypy]
 strict = true
 python_version = "3.11"
-files = ["src", "tests"]
+files = ["src", "tests", "examples"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
@@ -70,6 +70,9 @@ dev = [
     "pandas-stubs>=3.0.5.260914",
     "pytest>=9.1.1",
     "ruff>=0.17.2",
+]
+docs = [
+    "matplotlib>=3.11.2",
 ]
 
 [[tool.mypy.overrides]]
