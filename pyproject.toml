@@ -26,6 +26,7 @@ dependencies = [
     "numpy>=1.26",
     "pandas>=2.2",
     "scikit-learn>=1.5",
+    "threadpoolctl>=3.1",
 ]
 
 [project.urls]
@@ -67,3 +68,11 @@ dev = [
     "pytest>=9.1.1",
     "ruff>=0.17.2",
 ]
+
+[[tool.mypy.overrides]]
+module = ["sklearn.*"]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = ["threadpoolctl"]
+ignore_missing_imports = true
