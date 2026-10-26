@@ -35,7 +35,7 @@ class SimulationConfig:
     promo_lift: float = 0.3
     price_noise: float = 0.08
     demand_noise: float = 0.15
-    margin: float = 0.45
+    margin: float = 0.55
     seed: int = 7
 
 
