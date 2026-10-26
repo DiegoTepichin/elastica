@@ -1,6 +1,6 @@
 # AGENTS.md
 
-Operational rules for any coding agent (Claude Code, Gemini CLI, Codex, etc.) working on `cafe-elasticity`. Project context lives in `CLAUDE.md`.
+Operational rules for any coding agent (Claude Code, Gemini CLI, Codex, etc.) working on `elastica`. Project context lives in `CLAUDE.md`.
 
 ## Before changing code
 

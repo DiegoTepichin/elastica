@@ -1,10 +1,10 @@
-@../briefs/cafe-elasticity.md
+@../briefs/elastica.md
 
-# cafe-elasticity
+# elastica
 
 ## What it is
 
-A library that takes a CSV of transactions, estimates price elasticity with causal methods (double machine learning) and suggests a price. The project name is provisional.
+A library that takes a CSV of transactions, estimates price elasticity with causal methods (double machine learning) and suggests a price. It is written from scratch on public methods.
 
 ## Who it is for
 
