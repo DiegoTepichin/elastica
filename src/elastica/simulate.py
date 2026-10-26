@@ -1,8 +1,10 @@
 """Synthetic daily sales with a known price elasticity and realistic confounding.
 
-Demand and price both rise in high season, so a naive regression of quantity on price
-underestimates how price-sensitive customers are. Season is observable from the date, which is
-what lets double machine learning recover the true elasticity.
+Demand and price both rise in high season and around two sharp sales peaks (mid-November and
+Christmas), so a naive regression of quantity on price underestimates how price-sensitive
+customers are. Season and peaks are observable from the date, which is what lets double machine
+learning recover the true elasticity; the peaks are non-linear in the calendar, which is what
+defeats a linear regression with the same controls.
 """
 
 from __future__ import annotations
@@ -30,6 +32,8 @@ class SimulationConfig:
     base_quantity: float = 60.0
     season_on_price: float = 0.15
     season_on_demand: float = 0.6
+    peak_on_price: float = 0.2
+    peak_on_demand: float = 0.8
     promo_rate: float = 0.12
     promo_discount: float = 0.2
     promo_lift: float = 0.3
@@ -46,6 +50,7 @@ def simulate(config: SimulationConfig | None = None) -> Simulation:
     day_of_year = dates.day_of_year.to_numpy()
     season = np.sin(2 * np.pi * (day_of_year - 80) / 365.25)
     weekend = (dates.day_of_week.to_numpy() >= 5).astype(float)
+    peak = _peaks(day_of_year)
 
     low, high = cfg.elasticity_range
     elasticities = np.round(np.linspace(low, high, cfg.n_products), 2)
@@ -59,6 +64,7 @@ def simulate(config: SimulationConfig | None = None) -> Simulation:
         log_price = (
             np.log(base_price)
             + cfg.season_on_price * season
+            + cfg.peak_on_price * peak
             - cfg.promo_discount * promo
             + rng.normal(0, cfg.price_noise, cfg.n_days)
         )
@@ -66,6 +72,7 @@ def simulate(config: SimulationConfig | None = None) -> Simulation:
             np.log(cfg.base_quantity)
             + elasticity * (log_price - np.log(base_price))
             + cfg.season_on_demand * season
+            + cfg.peak_on_demand * peak
             + cfg.promo_lift * promo
             + 0.25 * weekend
             + rng.normal(0, cfg.demand_noise, cfg.n_days)
@@ -83,3 +90,9 @@ def simulate(config: SimulationConfig | None = None) -> Simulation:
             )
         )
     return Simulation(pd.concat(frames, ignore_index=True), truth)
+
+
+def _peaks(day_of_year: np.ndarray) -> np.ndarray:
+    """Narrow bumps (about a week wide) centred on mid-November and Christmas."""
+    centres = (320, 357)
+    return np.sum([np.exp(-0.5 * ((day_of_year - c) / 5.0) ** 2) for c in centres], axis=0)
