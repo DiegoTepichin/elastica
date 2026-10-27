@@ -113,7 +113,9 @@ panel = elastica.prepare(sim.transactions, elastica.Schema(cost="unit_cost", con
 for item in elastica.estimate(panel):
     r = item.result
     rec = elastica.recommend(item)
-    print(f"{item.product}: {r.elasticity:.2f} [{r.ci_low:.2f}, {r.ci_high:.2f}]  naive {r.naive_elasticity:+.2f}  ->  {rec.current_price:.2f} to {rec.recommended_price:.2f} ({rec.reason})")
+    print(
+        f"{item.product}: {r.elasticity:.2f} [{r.ci_low:.2f}, {r.ci_high:.2f}]  naive {r.naive_elasticity:+.2f}  ->  {rec.current_price:.2f} to {rec.recommended_price:.2f} ({rec.reason})"
+    )
 ```
 
 Más:
