@@ -94,6 +94,7 @@ def estimate_elasticity(
     seed: int = 0,
 ) -> DMLResult:
     """Estimate θ with cross-fitting. Rows must be in time order when ``folds`` is ``TIME``."""
+    check_options(n_folds, n_repeats, confidence)
     y, d, x = _check_inputs(y, d, x, n_folds)
     estimates: list[tuple[float, float]] = []
     r2_y: list[float] = []
@@ -122,6 +123,15 @@ def estimate_elasticity(
         price_r2=price_r2,
         warnings=_warnings(theta, len(y), price_r2),
     )
+
+
+def check_options(n_folds: int, n_repeats: int, confidence: float) -> None:
+    if n_folds < 2:
+        raise ValueError("n_folds must be at least 2")
+    if n_repeats < 1:
+        raise ValueError("n_repeats must be at least 1")
+    if not 0 < confidence < 1:
+        raise ValueError("confidence must be between 0 and 1")
 
 
 def _check_inputs(y: Array, d: Array, x: Array, n_folds: int) -> tuple[Array, Array, Array]:

@@ -8,7 +8,7 @@ import numpy as np
 import pandas as pd
 
 from elastica.data import LOG_PRICE, LOG_QUANTITY, Panel
-from elastica.dml import DMLResult, Folds, Regressor, estimate_elasticity
+from elastica.dml import DMLResult, Folds, Regressor, check_options, estimate_elasticity
 
 POOLED = "(pooled)"
 RECENT_PERIODS = 4
@@ -22,6 +22,9 @@ class EstimateOptions:
     n_repeats: int = 3
     confidence: float = 0.95
     seed: int = 0
+
+    def __post_init__(self) -> None:
+        check_options(self.n_folds, self.n_repeats, self.confidence)
 
 
 @dataclass(frozen=True, slots=True)

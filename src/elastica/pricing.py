@@ -7,6 +7,7 @@ recommendation is kept inside a band around the current price.
 
 from __future__ import annotations
 
+import math
 from dataclasses import dataclass
 from enum import StrEnum
 from typing import TYPE_CHECKING
@@ -71,6 +72,8 @@ def recommend(
 ) -> Recommendation:
     band = band or PriceBand()
     cost = unit_cost if unit_cost is not None else item.unit_cost
+    if cost is not None and not 0 <= cost < math.inf:
+        raise ValueError("the unit cost must be a non-negative number")
     objective = Objective.PROFIT if cost is not None else Objective.REVENUE
     current = item.current_price
     if item.result is None:

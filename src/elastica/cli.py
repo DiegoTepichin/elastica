@@ -28,7 +28,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     handler: Callable[[argparse.Namespace], int] = args.handler
     try:
         return handler(args)
-    except (DataError, ValueError) as exc:
+    except (DataError, OSError, ValueError) as exc:
         print(f"error: {exc}", file=sys.stderr)
         return EXIT_FAILURE
 
@@ -141,8 +141,7 @@ def _estimate(args: argparse.Namespace) -> int:
 
 
 def _price(args: argparse.Namespace) -> int:
-    lower, upper = (float(v) for v in args.band.split(","))
-    band = PriceBand(lower, upper)
+    band = _band(args.band)
     recommendations = [
         recommend(e, unit_cost=args.unit_cost, band=band) for e in _run_estimates(args)
     ]
@@ -165,6 +164,14 @@ def _price(args: argparse.Namespace) -> int:
     _print_warnings(frame)
     _write(frame, args.output)
     return EXIT_OK
+
+
+def _band(text: str) -> PriceBand:
+    try:
+        lower, upper = (float(value) for value in text.split(","))
+    except ValueError as exc:
+        raise ValueError(f"--band takes two numbers, such as 0.8,1.2; got {text!r}") from exc
+    return PriceBand(lower, upper)
 
 
 PERCENT_COLUMNS = {"profit_change", "revenue_change", "quantity_change"}
