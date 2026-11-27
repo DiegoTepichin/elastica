@@ -1,6 +1,6 @@
 [project]
 name = "elastica"
-version = "1.0.0"
+version = "1.0.1"
 description = "Causal price elasticity from transaction data with double machine learning, and the profit-maximizing price that follows."
 readme = "README.md"
 license = "MIT"

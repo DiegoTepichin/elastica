@@ -2,6 +2,16 @@
 
 All notable changes to this project are documented here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses [Semantic Versioning](https://semver.org/).
 
+## [1.0.1] - Unreleased
+
+### Fixed
+
+- Rows with a missing date were silently left out of the estimate; they are now an error.
+- Infinite values, missing numeric controls and negative costs are rejected with the column name.
+- `n_folds` below 2, `n_repeats` below 1 and a confidence outside (0, 1) are rejected. They used to produce empty results or zero-width intervals.
+- `recommend` rejects a negative or non-finite unit cost, and an empty simulation is an error.
+- The CLI prints one line, not a traceback, for a directory as input or an output it cannot write, and explains a malformed `--band`.
+
 ## [1.0.0] - 2026-10-26
 
 First public release.
@@ -16,4 +26,5 @@ First public release.
 - `elastica` CLI with `simulate`, `estimate` and `price`.
 - Reproducible benchmark (`examples/benchmark.py`).
 
+[1.0.1]: https://github.com/DiegoTepichin/elastica/compare/v1.0.0...main
 [1.0.0]: https://github.com/DiegoTepichin/elastica/releases/tag/v1.0.0

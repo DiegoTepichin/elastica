@@ -42,6 +42,10 @@ class SimulationConfig:
     margin: float = 0.55
     seed: int = 7
 
+    def __post_init__(self) -> None:
+        if self.n_products < 1 or self.n_days < 1:
+            raise ValueError("n_products and n_days must be at least 1")
+
 
 def simulate(config: SimulationConfig | None = None) -> Simulation:
     cfg = config or SimulationConfig()

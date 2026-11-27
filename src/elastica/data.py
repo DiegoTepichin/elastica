@@ -60,6 +60,8 @@ def read_transactions(path: str | Path) -> pd.DataFrame:
     file = Path(path)
     if not file.exists():
         raise DataError(f"{file} does not exist")
+    if not file.is_file():
+        raise DataError(f"{file} is not a file")
     if file.suffix.lower() == ".parquet":
         try:
             return pd.read_parquet(file)
@@ -110,17 +112,25 @@ def _normalize(transactions: pd.DataFrame, schema: Schema) -> pd.DataFrame:
     if schema.cost:
         frame["cost"] = _numbers(transactions[schema.cost], schema.cost)
     for control in schema.controls:
-        frame[control] = transactions[control].to_numpy()
+        column = transactions[control]
+        if pd.api.types.is_numeric_dtype(column):
+            column = _numbers(column, control)
+        frame[control] = column.to_numpy()
     if (frame["price"] < 0).any() or (frame["quantity"] < 0).any():
         raise DataError("price and quantity must not be negative")
+    if schema.cost and (frame["cost"] < 0).any():
+        raise DataError(f"column {schema.cost!r} must not be negative")
     return frame
 
 
 def _dates(column: pd.Series) -> pd.Series:
     try:
-        return pd.to_datetime(column, format="mixed")
+        dates = pd.to_datetime(column, format="mixed")
     except (ValueError, TypeError) as exc:
         raise DataError(f"column {column.name!r} has values that are not dates") from exc
+    if dates.isna().any():
+        raise DataError(f"column {column.name!r} has missing values")
+    return dates
 
 
 def _numbers(column: pd.Series, name: str) -> pd.Series:
@@ -131,6 +141,8 @@ def _numbers(column: pd.Series, name: str) -> pd.Series:
         raise DataError(f"column {name!r} has non-numeric values, e.g. {example!r}")
     if numbers.isna().any():
         raise DataError(f"column {name!r} has missing values")
+    if np.isinf(numbers.astype(float)).any():
+        raise DataError(f"column {name!r} has infinite values")
     return numbers.astype(float)
 
 
