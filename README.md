@@ -3,9 +3,9 @@
 Estimate how price-sensitive your customers really are from plain sales data, with double machine learning, and turn that into a price recommendation you can defend.
 
 [![CI](https://github.com/DiegoTepichin/elastica/actions/workflows/ci.yml/badge.svg)](https://github.com/DiegoTepichin/elastica/actions/workflows/ci.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/DiegoTepichin/elastica/blob/main/LICENSE)
 
-[Leer en español](README.es.md)
+[Leer en español](https://github.com/DiegoTepichin/elastica/blob/main/README.es.md)
 
 ![Estimated vs true elasticity on 50 simulated products: naive OLS and OLS with linear controls are biased toward zero, elastica lands on the diagonal](https://raw.githubusercontent.com/DiegoTepichin/elastica/main/docs/benchmark.svg)
 
@@ -150,8 +150,8 @@ uv run pytest
 uv run ruff check . && uv run ruff format --check . && uv run mypy .
 ```
 
-See [CONTRIBUTING.md](CONTRIBUTING.md).
+See [CONTRIBUTING.md](https://github.com/DiegoTepichin/elastica/blob/main/CONTRIBUTING.md).
 
 ## License
 
-[MIT](LICENSE) © Diego Tepichin
+[MIT](https://github.com/DiegoTepichin/elastica/blob/main/LICENSE) © Diego Tepichin
